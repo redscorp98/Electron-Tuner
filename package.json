@@ -1,0 +1,19 @@
+{
+  "name": "tuner",
+  "version": "1.0.0",
+  "description": "A simple Electron tuner application",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^9.0.3"
+  },
+  "dependencies": {
+    "csv-writer": "^1.6.0",
+    "electron-chartjs": "^1.0.0",
+    "pitchfinder": "^2.3.1"
+  }
+}
