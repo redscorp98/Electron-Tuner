@@ -58,6 +58,8 @@ function modifyNote(val) {
         }
         document.getElementById("output-note").value = notes[nextIndex]
     } else {
+        // https://www.electronjs.org/docs/api/dialog#dialogshowmessageboxsyncbrowserwindow-options
+        // Electron doesn't support javascript alert()
         dialog.showMessageBoxSync({ title: "Input error", message: "Invalid note input", type: "error" })
     }
 }
