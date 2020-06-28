@@ -71,24 +71,29 @@ async function setupDeviceInput(options) {
     }
     else {
         const device = (audioInputs.filter(input => input.label.includes(options.value)))
-        mediaDevice = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: { exact: device.deviceId } } })
-        // Uses default sample frequency of input device. Should be 48000 Hz
-        mediaRecorder = new MediaRecorder(mediaDevice)
-        mediaRecorder.ondataavailable = async function (e) {
-            const blob = e.data
-            const stream = blob.stream()
-            const reader = stream.getReader()
-            reader.read().then(buffer => {
-                audioCtx.decodeAudioData(buffer.value.buffer).then(audioBuffer => {
-                    audioData = audioBuffer.getChannelData(0)
-                    // writeCSV(audioData)
-                    getFrequency(audioBuffer.sampleRate, audioData)
-                }).catch(e => {
-                    console.log(e)
-                })
-            })
+        if (device.length === 0) {
+            console.log("No matching input found")
+            mediaRecorder = null
         }
-        console.log(mediaRecorder)
+        else {
+            mediaDevice = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: { exact: device[0].deviceId } } })
+            // Uses default sample frequency of input device. Should be 48000 Hz
+            mediaRecorder = new MediaRecorder(mediaDevice)
+            mediaRecorder.ondataavailable = async function (e) {
+                const blob = e.data
+                const stream = blob.stream()
+                const reader = stream.getReader()
+                reader.read().then(buffer => {
+                    audioCtx.decodeAudioData(buffer.value.buffer).then(audioBuffer => {
+                        audioData = audioBuffer.getChannelData(0)
+                        // writeCSV(audioData)
+                        getFrequency(audioBuffer.sampleRate, audioData)
+                    }).catch(e => {
+                        console.log(e)
+                    })
+                })
+            }
+        }
     }
 }
 
@@ -101,6 +106,7 @@ async function updateInputList() {
         console.log("No inputs to display")
         return false
     } else {
+        // Populate dropdown list
         inputs.forEach(input => {
             select.options[select.options.length] = new Option(input.label.slice(0, -12))
         });
@@ -126,21 +132,32 @@ async function getMediaDevices() {
     Record for PERIOD
     Stop recording for 1000 - PERIOD
  */
-async function listen() {
-    if (mediaRecorder !== null) {
-        recording = window.setInterval(() => {
-            mediaRecorder.start()
-            window.setTimeout(() => {
-                mediaRecorder.stop()
-            }, PERIOD)
-        }, 1000)
+async function toggleListen(clicked = false) {
+    if (document.getElementById("listen").innerHTML === "Record") {
+        // Begin listening if there is a media recorder available
+        if (mediaRecorder !== null) {
+            document.getElementById("listen").innerHTML = "Stop Recording"
+            recording = window.setInterval(() => {
+                mediaRecorder.start()
+                window.setTimeout(() => {
+                    mediaRecorder.stop()
+                }, PERIOD)
+            }, 1000)
+        } else {
+            // Not recording audio
+            if (clicked) {
+                // Grey out button to show that the recording isn't happening
+                document.getElementById("listen").style.backgroundColor = "#8c3630"
+                setTimeout(() => { document.getElementById("listen").style.backgroundColor = "#fe5f55" }, 1000)
+            }
+        }
+    } else if (document.getElementById("listen").innerHTML === "Stop Recording") {
+        // Stop recording audio from the microphone input
+        document.getElementById("listen").innerHTML = "Record"
+        clearInterval(recording)
     }
 }
 
-// Stop recording audio from the microphone input
-function stopListening() {
-    clearInterval(recording)
-}
 
 /* 
     Fill a list of available audio inputs
