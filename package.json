@@ -4,16 +4,17 @@
   "description": "A simple Electron tuner application",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^9.0.3"
+    "electron": "^18.1.0"
   },
   "dependencies": {
     "csv-writer": "^1.6.0",
     "electron-chartjs": "^1.0.0",
-    "pitchfinder": "^2.3.1"
+    "pitchfinder": "^2.3.2"
   }
 }

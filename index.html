@@ -3,21 +3,21 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>Electron Tuner</title>
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
     <script src="./renderer.js"></script>
 </head>
 
-<body onload="main()">
-    <div id="main">
+<body onload="">
+    <div id="main" onload="main()">
         <div class="output-container">
             <h1 id="title-1">Note</h1>
             <h2 id="current-note"></h2>
         </div>
         <div class="input-container">
             <h3 id="title-2">Input devices</h3>
-            <select name="inputs" id="audio-inputs" onchange="setupDeviceInput(this)">
+            <select name="inputs" id="audio-inputs" onfocus="main()" onchange="setupDeviceInput(this)">
                 <option> None</option>
             </select>
             <div class="button-container">

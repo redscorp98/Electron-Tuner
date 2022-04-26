@@ -1,4 +1,5 @@
-const dialog = require('electron').remote.dialog
+// const dialog = require('electron').remote.dialog
+
 var audioCtx = new AudioContext;
 let recording;
 const PERIOD = 500; // 500 ms
@@ -60,7 +61,7 @@ function modifyNote(val) {
     } else {
         // https://www.electronjs.org/docs/api/dialog#dialogshowmessageboxsyncbrowserwindow-options
         // Electron doesn't support javascript alert()
-        dialog.showMessageBoxSync({ title: "Input error", message: "Invalid note input", type: "error" })
+        //dialog.showMessageBoxSync({ title: "Input error", message: "Invalid note input", type: "error" })
     }
 }
 
@@ -100,6 +101,14 @@ async function setupDeviceInput(options) {
 // Updates displayed list of audio devices
 async function updateInputList() {
     let select = document.getElementById("audio-inputs");
+
+    // Clear existing items in dropdown
+    const length = select.options.length;
+    for (let i =0;i<length;i++)
+    {
+        select.options.remove(0);
+    }
+
     const inputs = await getMediaDevices()
     audioInputs = inputs
     if (inputs === null) {
@@ -167,7 +176,9 @@ async function main() {
     const inputReady = await updateInputList()
     updateDisplayFrequency()
     if (inputReady)
+    {
         setupDeviceInput(document.getElementById("audio-inputs"))
+    }
 }
 
 // Return nearest number in a list

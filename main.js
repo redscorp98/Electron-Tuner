@@ -6,7 +6,11 @@ function createWindow() {
         width: 800,
         height: 600,
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
+            nodeIntegrationInWorker: true,
+            nodeIntegrationInSubFrames: true,
+            enableRemoteModule: true,
+            contextIsolation: false //required flag
         }
     })
 
@@ -14,7 +18,7 @@ function createWindow() {
     win.loadFile('index.html')
 
     // Open the DevTools.
-    win.webContents.openDevTools()
+    //win.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
